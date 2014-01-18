@@ -6,16 +6,85 @@
 
   <title>Index</title>
 
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="bower_components/d3/d3.js"></script>
   <script>
-    var socket = io.connect('http://localhost:5011');
-    socket.on('news', function (data) {
-        console.log(data);
-        socket.emit('my other event', { my: 'data' });
-      });
-  </script>
-  </head>
-  <body>
-  </body>
+    window.onload = function() {
+      var data = [
+        {word: "math", count: 728},
+        {word: "science", count: 51},
+        {word: "english", count: 137},
+        {word: "computers", count: 112},
+        {word: "talk", count: 495},
+        {word: "speak", count: 139},
+        {word: "you", count: 219},
+        {word: "me", count: 588},
+        {word: "he", count: 128},
+        {word: "she", count: 417},
+        {word: "E.T.", count: 33}
+      ]
 
+      var dataMax = d3.max(data, function(d) { return d.count; });
+
+      var textScale = d3.scale.linear().domain([0, dataMax]).range([12, 150]);
+      d3.select('body')
+        .selectAll('span')
+        .data(data)
+        .enter()
+        .append('span')
+        .text(function(d) { return d.word; })
+        .style("color", function() {
+          var hexAlphabet = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'];
+          var color = '#';
+          for (var i = 0; i < 6; i++) {
+            color += hexAlphabet[Math.floor(Math.random() * 16)].toString();
+          }
+          return color;
+        })
+        .style("float", 'left')
+        .style("padding", "5px")
+        .style("font-size", function(d) { return textScale(d.count).toString() + 'px'; });
+
+      var h = 600;
+      var padding = 1;
+
+      var barScale = d3.scale.linear().domain([0, dataMax]).range([0, h]);
+      var calcY = function(d) { return h - barScale(d.count); };
+      var calcHeight = function (d) { return barScale(d.count); };
+
+      var calcX = function(d, i) { return (i * Math.floor(100 / data.length)).toString() + '%'; };
+      var calcWidth = function () { return (Math.floor(100 / data.length) - padding).toString() + "%"; };
+
+      var svg = d3.select('body').append('svg').attr('width', '100%').attr('height', h);
+
+      svg.selectAll('rect')
+        .data(data)
+        .enter()
+        .append('rect')
+        .attr('x', calcX)
+        .attr('y', calcY)
+        .attr('height', calcHeight)
+        .attr('width', calcWidth)
+        .attr('fill', 'teal')
+
+      svg.selectAll('text')
+        .data(data)
+        .enter()
+        .append('text')
+        .attr('x', function(d, i) {
+            var xPos = parseInt(calcX(d, i).replace(/%/, ''))
+            var xWidth = parseInt(calcWidth().replace(/%/, ''))
+            return (xPos + xWidth / 2).toString() + '%';
+        })
+        .attr('y', function (d, i) {
+            return calcY(d, i) + 20;
+        })
+        .attr('fill', 'white')
+        .attr('text-anchor', 'middle')
+        .text(function(d) { return d.word + ' ( ' + d.count.toString() + ' ) '; })
+    }
+  </script>
+
+</head>
+<body>
+</body>
 </html>
