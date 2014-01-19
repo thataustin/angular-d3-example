@@ -1,32 +1,46 @@
 <!DOCTYPE HTML>
-<html>
+<html data-ng-app="dataStuff">
 
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-  <title>Index</title>
+  <title>Words of Importance</title>
+  <style>
+    #word_cloud {width: 60%; height: 25%; margin: auto; overflow:hidden; }
+    #bar_chart {width: 75%; height: 75%; margin: auto; overflow:hidden}
+    h1 { width: 40%; margin: auto;}
+  </style>
 
   <script src="bower_components/d3/d3.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/lodash/dist/lodash.js"></script>
   <script>
+    angular.module("dataStuff", [])
+      .controller("MainCtrl", ['$scope', function($scope) {
+          $scope.displayTypes = [{desc: "Bar Chart", value:'bar_chart'}, {desc: "Word Cloud", value:"word_cloud"}, {desc: "All", value: 'all'}];
+        $scope.displayType = $scope.displayTypes[0];
+        console.log($scope.displayType);
+      }]);
+
     window.onload = function() {
       var data = [
-        {word: "math", count: 728},
+        {word: "math", count: 28},
         {word: "science", count: 51},
-        {word: "english", count: 137},
-        {word: "computers", count: 112},
-        {word: "talk", count: 495},
-        {word: "speak", count: 139},
-        {word: "you", count: 219},
-        {word: "me", count: 588},
-        {word: "he", count: 128},
-        {word: "she", count: 417},
+        {word: "english", count: 37},
+        {word: "computers", count: 12},
+        {word: "talk", count: 95},
+        {word: "speak", count: 39},
+        {word: "you", count: 19},
+        {word: "me", count: 88},
+        {word: "he", count: 28},
+        {word: "she", count: 17},
         {word: "E.T.", count: 33}
       ]
 
       var highestFrequency = d3.max(data, function(d) { return d.count; });
 
       var textScale = d3.scale.linear().domain([0, highestFrequency]).range([12, 150]);
-      d3.select('body')
+      d3.select('#word_cloud')
         .selectAll('span')
         .data(data)
         .enter()
@@ -41,53 +55,54 @@
           return color;
         })
         .style("float", 'left')
-        .style("padding", "5px")
         .style("font-size", function(d) { return textScale(d.count).toString() + 'px'; });
 
-      var h = 600;
+      var h = 500;
       var w = 900;
       var padding = 1;
+      var yAxisPadding = 40;
+      var margin = {top: 10, bottom: 10}
 
-      var yScale = d3.scale.linear().domain([0, highestFrequency]).range([0, h]);
-      var calcY = function(d) { return h - yScale(d.count); };
-      var calcHeight = function (d) { return yScale(d.count); };
+      var yScale = d3.scale.linear().domain([100, 0]).range([margin.bottom, h - margin.top]);
+      var calcY = function(d) { return yScale(d.count); };
+      var calcHeight = function (d) { return h - yScale(d.count) - margin.bottom; };
 
-      var barWidth = Math.floor(100 / data.length);
-      var calcX = function(d, i) { return (i * barWidth)};
+      var barWidth = Math.floor((w - yAxisPadding) / data.length);
+      var calcX = function(d, i) { return (yAxisPadding + i * barWidth)};
       var paddedBarWidth = barWidth - padding;
 
-      var svg = d3.select('body').append('svg').attr('width', '100%').attr('height', h);
+      var svg = d3.select('#bar_chart').append('svg').attr('width', w).attr('height', h);
 
       svg.selectAll('rect')
         .data(data)
         .enter()
         .append('rect')
-        .attr('x', function(d, i) { return calcX(d, i).toString() + '%'; })
+        .attr('x', calcX)
         .attr('y', calcY)
         .attr('height', calcHeight)
-        .attr('width', paddedBarWidth.toString() + '%')
+        .attr('width', paddedBarWidth)
         .attr('fill', 'teal')
 
       svg.selectAll('text')
         .data(data)
         .enter()
         .append('text')
-        .attr('x', function(d, i) { return (calcX(d, i) + paddedBarWidth / 2).toString() + '%'; })
-        .attr('y', function (d, i) { return calcY(d, i) + 20; })
+        .text(function(d) { return d.word; })
+        .attr('x', function(d, i) { return (calcX(d, i) + paddedBarWidth / 2); })
+        .attr('y', function (d, i) { return calcY(d, i) + calcHeight(d, i) / 2; })
         .attr('fill', 'white')
         .attr('text-anchor', 'middle')
-        .text(function(d) { return d.word + ' (' + d.count.toString() + ')'; })
 
-      var yAxis = d3.svg.axis()
-        .scale(yScale)
-        .orient("left");
-      svg
-        .append('g')
-        .call(yAxis);
+      var yAxis = d3.svg.axis().scale(yScale).orient("left");
+      svg.append('g').attr('transform', 'translate(' + yAxisPadding.toString() + ')').call(yAxis);
+
     }
   </script>
-
 </head>
-<body>
+<body data-ng-controller="MainCtrl">
+  <h1>Words of Importance</h1>
+  <select data-ng-model="displayType" data-ng-options="t.desc for t in displayTypes"></select>
+  <div id="word_cloud" data-ng-show="displayType.value=='word_cloud' || displayType.value=='all'"></div>
+  <div id="bar_chart" data-ng-show="displayType.value=='bar_chart' || displayType.value=='all'"></div>
 </body>
 </html>
