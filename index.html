@@ -23,9 +23,9 @@
         {word: "E.T.", count: 33}
       ]
 
-      var dataMax = d3.max(data, function(d) { return d.count; });
+      var highestFrequency = d3.max(data, function(d) { return d.count; });
 
-      var textScale = d3.scale.linear().domain([0, dataMax]).range([12, 150]);
+      var textScale = d3.scale.linear().domain([0, highestFrequency]).range([12, 150]);
       d3.select('body')
         .selectAll('span')
         .data(data)
@@ -45,14 +45,16 @@
         .style("font-size", function(d) { return textScale(d.count).toString() + 'px'; });
 
       var h = 600;
+      var w = 900;
       var padding = 1;
 
-      var barScale = d3.scale.linear().domain([0, dataMax]).range([0, h]);
-      var calcY = function(d) { return h - barScale(d.count); };
-      var calcHeight = function (d) { return barScale(d.count); };
+      var yScale = d3.scale.linear().domain([0, highestFrequency]).range([0, h]);
+      var calcY = function(d) { return h - yScale(d.count); };
+      var calcHeight = function (d) { return yScale(d.count); };
 
-      var calcX = function(d, i) { return (i * Math.floor(100 / data.length)).toString() + '%'; };
-      var calcWidth = function () { return (Math.floor(100 / data.length) - padding).toString() + "%"; };
+      var barWidth = Math.floor(100 / data.length);
+      var calcX = function(d, i) { return (i * barWidth)};
+      var paddedBarWidth = barWidth - padding;
 
       var svg = d3.select('body').append('svg').attr('width', '100%').attr('height', h);
 
@@ -60,27 +62,28 @@
         .data(data)
         .enter()
         .append('rect')
-        .attr('x', calcX)
+        .attr('x', function(d, i) { return calcX(d, i).toString() + '%'; })
         .attr('y', calcY)
         .attr('height', calcHeight)
-        .attr('width', calcWidth)
+        .attr('width', paddedBarWidth.toString() + '%')
         .attr('fill', 'teal')
 
       svg.selectAll('text')
         .data(data)
         .enter()
         .append('text')
-        .attr('x', function(d, i) {
-            var xPos = parseInt(calcX(d, i).replace(/%/, ''))
-            var xWidth = parseInt(calcWidth().replace(/%/, ''))
-            return (xPos + xWidth / 2).toString() + '%';
-        })
-        .attr('y', function (d, i) {
-            return calcY(d, i) + 20;
-        })
+        .attr('x', function(d, i) { return (calcX(d, i) + paddedBarWidth / 2).toString() + '%'; })
+        .attr('y', function (d, i) { return calcY(d, i) + 20; })
         .attr('fill', 'white')
         .attr('text-anchor', 'middle')
-        .text(function(d) { return d.word + ' ( ' + d.count.toString() + ' ) '; })
+        .text(function(d) { return d.word + ' (' + d.count.toString() + ')'; })
+
+      var yAxis = d3.svg.axis()
+        .scale(yScale)
+        .orient("left");
+      svg
+        .append('g')
+        .call(yAxis);
     }
   </script>
 
