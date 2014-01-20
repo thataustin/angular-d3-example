@@ -5,17 +5,8 @@
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
   <title>Words of Importance</title>
-  <style>
-    #word_cloud {width: 80%; height: 25%; margin: auto; overflow:hidden; }
-    #bar_chart {width: 100; height: 75%; margin: auto; overflow:hidden}
-    #word_updater {float: left; width: 15%; height: 900px; border: 3px solid #ddd; }
-    select { align: center; }
-    h1 { width: 40%; margin: auto;}
-    body { width: 90%; margin: 5% 10% 5% 5%;}
-    ul { margin: 5%; padding: 0 6%; }
-    li { list-style-type: square;}
-    li > input { float: right; color: #bab; }
-  </style>
+
+  <link type="text/css" rel="stylesheet" href="css/main.css">
 
   <script src="bower_components/d3/d3.js"></script>
   <script src="bower_components/angular/angular.js"></script>
@@ -23,21 +14,36 @@
   <script src="js/modules/app.js"></script>
   <script src="js/controllers/main.js"></script>
   <script src="js/directives/barChart.js"></script>
+  <script src="js/directives/barChartPerLetter.js"></script>
   <script src="js/directives/wordCloud.js"></script>
   <script src="js/directives/draggable.js"></script>
   <script src="bower_components/lodash/dist/lodash.js"></script>
 </head>
 <body data-ng-controller="MainCtrl">
-  <h1>Words of Importance</h1>
+
+  <h1>Words Stats</h1>
+
   <div id="word_updater">
     <h2>Words in list</h2>
     <ul data-ng-repeat="d in data">
       <li><span>{{d.word}}</span><input type="text" size="4" value="{{d.count}}"/>
     </ul>
-    <input ng-model="new_word"/><a data-ng-click="data.push(new_word)">Add New Word</a>
+    <input ng-model="new_word"/><a data-ng-click="addWord(new_word)">Add New Word</a>
   </div>
+
   <select data-ng-model="displayType" data-ng-options="t.desc for t in displayTypes"></select>
-  <div id="word_cloud" word-stat-word-cloud draggable data-ng-show="displayType.value=='word_cloud' || displayType.value=='all'"></div>
-  <div id="bar_chart" word-stat-bar-chart draggable data-ng-show="displayType.value=='bar_chart' || displayType.value=='all'"></div>
+
+  <div id="word_cloud" word-stat-word-cloud draggable
+    data-ng-show="displayType.value=='word_cloud' || displayType.value=='all'">
+  </div>
+
+  <div id="bar_chart_per_word" word-stat-bar-chart-per-word draggable
+    data-ng-show="displayType.value=='bar_chart_per_word' || displayType.value=='all'">
+  </div>
+
+  <div id="bar_chart_per_letter" word-stat-bar-chart-per-letter draggable
+    data-ng-show="displayType.value=='bar_chart_per_letter' || displayType.value=='all'">
+  </div>
+
 </body>
 </html>
