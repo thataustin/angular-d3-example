@@ -1,4 +1,4 @@
-angular.module('WordApp').directive('wordStatBarChartPerWord', ['wordDP', function(wordDP) {
+angular.module('WordApp').directive('wordStatBarChartPerWord', ['wordStorage', function(wordStorage) {
   'use strict';
   var h = 500;
   var w = 900;
@@ -6,8 +6,8 @@ angular.module('WordApp').directive('wordStatBarChartPerWord', ['wordDP', functi
   return {
     restrict: 'A',
     link: function (scope, el, attrs) {
-      var data = wordDP.getData();
-      var highestFrequency = wordDP.getHighestFrequency(data);
+      var data = wordStorage.getWords();
+      var highestFrequency = wordStorage.getHighestFrequency(data);
 
       var padding = 1;
       var yAxisPadding = 40;

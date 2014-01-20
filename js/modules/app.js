@@ -1,1 +1,2 @@
-angular.module('WordApp', ['DataProvider']);
+angular.module('WordApp', [])
+  .value('remoteUrl', 'http://localhost:7677');

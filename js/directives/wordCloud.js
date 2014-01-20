@@ -1,10 +1,10 @@
-angular.module('WordApp').directive('wordStatWordCloud', ['wordDP', function(wordDP) {
+angular.module('WordApp').directive('wordStatWordCloud', ['wordStorage', function(wordStorage) {
   'use strict';
   return {
     restrict: 'A',
     link: function (scope, el, attrs) {
-      var data = wordDP.getData();
-      var highestFrequency = wordDP.getHighestFrequency(data);
+      var data = wordStorage.getWords();
+      var highestFrequency = wordStorage.getHighestFrequency(data);
       var textScale = d3.scale.linear().domain([0, highestFrequency]).range([12, 150]);
 
       d3.select('#' + attrs.id)

@@ -1,4 +1,4 @@
-angular.module('WordApp').directive('wordStatBarChartPerLetter', ['wordDP', function(wordDP) {
+angular.module('WordApp').directive('wordStatBarChartPerLetter', ['wordStorage', function(wordStorage) {
   'use strict';
 
   var margins = {top: 20, right: 20, bottom: 50, left: 40};
@@ -19,10 +19,10 @@ angular.module('WordApp').directive('wordStatBarChartPerLetter', ['wordDP', func
     restrict: 'A',
     link: function (scope, el, attrs) {
 
-      var data = wordDP.getDataByLetter();
+      var data = wordStorage.getWordsByLetter();
       x.domain(data.map(function(d) { return d.letter; }));
 
-      y.domain([0, Math.round(wordDP.getHighestFrequency(data) * 1.02)]);
+      y.domain([0, Math.round(wordStorage.getHighestFrequency(data) * 1.02)]);
       var svg = d3.select('#' + attrs.id)
         .append('svg')
           .attr('width', outerW)
