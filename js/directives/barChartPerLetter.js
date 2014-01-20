@@ -1,7 +1,7 @@
 angular.module('WordApp').directive('wordStatBarChartPerLetter', ['wordDP', function(wordDP) {
   'use strict';
 
-  var margins = {top: 20, right: 20, bottom: 20, left: 40};
+  var margins = {top: 20, right: 20, bottom: 50, left: 40};
 
   // SVG Height/Width
   var outerH = 500;
@@ -23,12 +23,12 @@ angular.module('WordApp').directive('wordStatBarChartPerLetter', ['wordDP', func
       x.domain(data.map(function(d) { return d.letter; }));
 
       y.domain([0, Math.round(wordDP.getHighestFrequency(data) * 1.02)]);
-
-      var chart = d3.select('#' + attrs.id)
+      var svg = d3.select('#' + attrs.id)
         .append('svg')
           .attr('width', outerW)
-          .attr('height', outerH)
-        .append('g')
+          .attr('height', outerH);
+
+      var chart = svg.append('g')
           .attr('height', h)
           .attr('width', w)
           .attr('transform', 'translate(' + margins.left + ', ' + margins.top + ')');
@@ -57,6 +57,11 @@ angular.module('WordApp').directive('wordStatBarChartPerLetter', ['wordDP', func
           .attr('transform', 'translate(0, ' + h + ')')
           .attr('class', 'x axis')
           .call(xAxis);
+      svg.append('text')
+          .text("First Letter of Word (Zero values ommitted)")
+          .attr('text-anchor', 'middle')
+          .attr('x', outerW/2)
+          .attr('y', outerH - 10);
 
       var yAxis = d3.svg.axis()
           .scale(y)
