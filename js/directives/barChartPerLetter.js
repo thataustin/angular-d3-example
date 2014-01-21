@@ -1,5 +1,5 @@
-angular.module('WordApp').directive('wordStatBarChartPerLetter', ['wordStorage', function(wordStorage) {
-
+angular.module('WordApp')
+.directive('wordStatBarChartPerLetter', ['wordStorage', function(wordStorage) {
   var margins = {top: 20, right: 20, bottom: 50, left: 40};
 
   // SVG Height/Width

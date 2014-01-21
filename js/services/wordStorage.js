@@ -11,8 +11,19 @@ angular.module('WordApp')
     }
   };
 
-  this.addWord = function (word) {
-    this.data.push({word: this.normalizeWord(word), count: 1});
+  this.addWord = function (newWord, count) {
+    count = count || 1;
+    var updated = false;
+    _.forEach(this.data, function(currentWord) {
+      if (currentWord.word.toLowerCase() == this.normalizeWord(newWord).toLowerCase()) {
+        currentWord.count++;
+        updated = true;
+        return false; // to break out of the for loop early
+      }
+    }, this);
+    if (!updated) {
+      this.data.push({word: this.normalizeWord(newWord), count: 1});
+    }
   };
 
   this.getWords = function() {

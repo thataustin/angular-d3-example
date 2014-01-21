@@ -35,13 +35,12 @@ angular.module('WordApp')
         .attr('x', 0)
         .attr('y', 0)
         .call(yAxis);
-    } else {
-      t.select('.yTick').call(yAxis);
     }
 
     var updateChart = function(newWords) {
 
       y.domain([0, wordStorage.getHighestFrequency(newWords)]);
+      svg.select('.yTick').call(yAxis);
 
       var getYPos = function(d) { return y(d.count); };
       var calcHeight = function (d) { return h - y(d.count); };
@@ -50,7 +49,7 @@ angular.module('WordApp')
       var getXPos = function(d, i) { return (i * barWidth); };
       var paddedBarWidth = barWidth - padding;
 
-      var centerOfBarX = function(d, i) { return getXPos(d, i) + paddedBarWidth / 2};
+      var centerOfBarX = function(d, i) { return getXPos(d, i) + paddedBarWidth / 2; };
       var centerOfBarY = function (d, i) { return getYPos(d, i) + calcHeight(d, i) / 2; };
 
       var rect = chart.selectAll('rect').data(newWords);
