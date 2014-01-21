@@ -8,7 +8,8 @@ angular.module('WordApp').controller('MainCtrl', ['$rootScope', '$scope', 'wordS
       {desc: 'All', value: 'all'}
     ];
     $scope.displayType = $scope.displayTypes[0];
-    $scope.data = dp.getWords();
+    $scope.words = dp.getWords();
+    $scope.highestFrequency = dp.getHighestFrequency($scope.words);
     $scope.addWord = function(word) {
       dp.addWord(word);
     };

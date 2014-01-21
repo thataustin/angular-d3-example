@@ -3,6 +3,7 @@ angular.module('WordApp').directive('wordStatWordCloud', ['wordStorage', functio
   return {
     restrict: 'A',
     link: function (scope, el, attrs) {
+      
       var data = wordStorage.getWords();
       var highestFrequency = wordStorage.getHighestFrequency(data);
       var textScale = d3.scale.linear().domain([0, highestFrequency]).range([12, 150]);
