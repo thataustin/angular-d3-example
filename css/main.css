@@ -1,23 +1,23 @@
 svg rect {fill: steelblue;}
-select {align: center;}
 h1 {font-size: 4em; width: 100%; text-align: center;}
+#dictionary { float: left; padding: 10px; }
 body {width: 90%; margin: 5% 10% 5% 5%;}
-ul {margin: 5%; padding: 0 6%;}
 li {list-style-type: square; padding: 5px;}
 .axis text { font: 14px sans-serif; }
 
+ul { clear: both; }
+select { float: right; margin: 20px; }
 #word_updater {
-  float: left; width: 15%; height: 900px; border: 3px solid #ddd;
+  display: block; width: 100%; height: 15%; border: 3px solid #ddd;
 }
 
 #word_cloud, #bar_chart_per_word, #bar_chart_per_letter {
   width: 80%; height: 25%; margin: auto; overflow:hidden;
 }
 
-li > input {
-  float: right;color: #bab;
-}
 
 .xaxis path, .yaxis path, .axis path, .axis line {
   fill: none; stroke: #000; shape-rendering: crispEdges;
 }
+
+ul li { display: inline; }

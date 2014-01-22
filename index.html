@@ -24,7 +24,8 @@
   <h1>Words Stats</h1>
 
   <div id="word_updater">
-    <h2>Dictionary</h2>
+    <h2 id="dictionary">Dictionary</h2>
+    <select data-ng-model="displayType" data-ng-options="t.desc for t in displayTypes"></select>
     <ul>
       <li data-ng-repeat="w in words">
         <span>{{w.word}}</span>
@@ -32,12 +33,10 @@
       </li>
     </ul>
     <br>
-    <a data-ng-click="addWord(newWord)">Add New Word</a>
     <input ng-model="newWord">
-
+    <button data-ng-click="addWord(newWord)">Add New Word</button>
   </div>
 
-  <select data-ng-model="displayType" data-ng-options="t.desc for t in displayTypes"></select>
 
   <div id="word_cloud" word-stat-word-cloud draggable
     data-ng-show="displayType.value=='word_cloud' || displayType.value=='all'">
