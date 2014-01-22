@@ -3,10 +3,12 @@
   "strict": false,
   "node": true,
   "unused": true,
+  "laxcomma": true,
+  "laxbreak": true,
   "globals": {
     "angular": true,
     "d3": true,
-    "_": true,
-    "require": true
+    "\_": true,
+    "io": true
   }
 }

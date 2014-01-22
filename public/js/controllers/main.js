@@ -13,4 +13,8 @@ angular.module('WordApp').controller('MainCtrl', ['$rootScope', '$scope', 'wordS
     $scope.addWord = function(word) {
       dp.addWord(word);
     };
+
+    $scope.$on('wordUpdate', function(targetScope, currentScope) {
+      $rootScope.$apply(function() { $scope.words = dp.getWords(); });
+    });
   }]);

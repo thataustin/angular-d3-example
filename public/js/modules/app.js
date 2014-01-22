@@ -1,2 +1,1 @@
-angular.module('WordApp', [])
-  .value('remoteUrl', 'http://localhost:7677');
+angular.module('WordApp', []);
