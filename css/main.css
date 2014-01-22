@@ -18,6 +18,6 @@ li > input {
   float: right;color: #bab;
 }
 
-.axis path, .axis line {
+.xaxis path, .yaxis path, .axis path, .axis line {
   fill: none; stroke: #000; shape-rendering: crispEdges;
 }

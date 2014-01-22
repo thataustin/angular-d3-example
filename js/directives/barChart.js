@@ -17,19 +17,18 @@ angular.module('WordApp')
 
   var link = function (scope, el, attrs) {
     if (svg === null) {
-      svg = d3.select('#' + attrs.id).append('svg')
-        .attr('width', outerW)
-        .attr('height', outerH);
+      svg = d3.select('#' + attrs.id).append('svg').attr('width', outerW).attr('height', outerH);
+
       chart = svg.append('g')
           .attr('height', h)
           .attr('width', w)
           .attr('transform', 'translate(' + margins.left + ', ' + margins.top + ')');
 
-      t = svg.transition().duration(1000);
+      t = svg.transition().duration(750);
 
       yAxis = d3.svg.axis().scale(y).orient('left');
       svg.append('g')
-        .attr('class', 'yTick axis')
+        .attr('class', 'yaxis')
         .attr('width', 20)
         .attr('transform', 'translate(' + margins.left +', ' + margins.top + ')')
         .attr('x', 0)
@@ -40,7 +39,9 @@ angular.module('WordApp')
     var updateChart = function(newWords) {
 
       y.domain([0, wordStorage.getHighestFrequency(newWords)]);
-      svg.select('.yTick').call(yAxis);
+
+      var t = svg.transition().duration(750);
+      t.select('.yaxis').call(yAxis.scale(y));
 
       var getYPos = function(d) { return y(d.count); };
       var calcHeight = function (d) { return h - y(d.count); };
